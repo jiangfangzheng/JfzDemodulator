@@ -23,6 +23,8 @@ public:
 	~MainWindow();
 
 private:
+	// 时间
+	QDateTime currentTime;
 	// UDP相关-做客户端（从解调仪获取数据）
 	QUdpSocket *receiver;	// UDP 接收
 	int cnt;				// 从UDP接收计数
@@ -53,10 +55,9 @@ private slots:
 	void clientOnconnect();     // TCP客户端连上
 	void clientOnDisconnected();// TCP客户端断开
 	void sentDataToTcpServer(); // 发送数据到TCP服务器
-
 	void sentDataToTcpSerial(); // 发送数据到串口
-
 	void serialRead();          // 串口收到数据
+	void timerUpDate();         // 显示更新时间
 
 
 	void on_pushButton_clicked();

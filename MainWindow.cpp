@@ -16,6 +16,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	// TCP客户端
 	enableSentToClient =false;// 不能发给TCP服务器
 	needCloseTcpClient =false;// 不需要关闭TCP连接
+	// 时间定时器相关
+	QTimer *timer0 = new QTimer(this);
+	connect(timer0,SIGNAL(timeout()),this,SLOT(timerUpDate()));
+	timer0->start(1000);
 	// 定时器相关-TCP 5s一次
 	QTimer *timer1 = new QTimer(this);
 	connect(timer1,SIGNAL(timeout()),this,SLOT(sentDataToTcpServer()));
@@ -196,7 +200,7 @@ void MainWindow::readPendingDatagrams()
 				}
 				temp += temp2 + "\n";
 			}
-			ui->textEdit->setText("接收" + QString::number(cnt++) + "次，包大小 "+ QString::number(datagramAll.size()) +"，包内容：\n" + temp);
+			ui->textEdit->setText("接收" + QString::number(cnt++) + "次，时间" + currentTime.toString("yyyyMMdd hh:mm:ss")+"，包大小"+ QString::number(datagramAll.size()) +"，包内容：\n" + temp);
 			datagramAll.clear();
 		}
 		// 如果计数太大，清空
@@ -395,4 +399,10 @@ void MainWindow::on_pushButton_4_clicked()
 void MainWindow::serialRead()
 {
 	ui->textEdit->append(serial.readAll());
+}
+
+void MainWindow::timerUpDate()
+{
+	currentTime = QDateTime::currentDateTime();
+	MainWindow::setWindowTitle("异想家解调仪      " + currentTime.toString("yyyy-MM-dd hh:mm:ss"));
 }
